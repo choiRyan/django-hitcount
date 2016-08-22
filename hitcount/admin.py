@@ -77,7 +77,7 @@ class HitAdmin(admin.ModelAdmin):
             self.message_user(request, "%s successfully deleted." % msg)
     delete_queryset.short_description = _("Delete selected hits")
 
-admin.site.register(Hit, HitAdmin)
+#admin.site.register(Hit, HitAdmin)
 
 
 class HitCountAdmin(admin.ModelAdmin):
