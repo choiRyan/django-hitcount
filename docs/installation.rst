@@ -96,7 +96,7 @@ Here is an example implementation from the `example project`_::
     from hitcount.views import HitCountDetailView
 
     class PostCountHitDetailView(HitCountDetailView):
-        modal = Post        # your model goes here
+        model = Post        # your model goes here
         count_hit = True    # set to True if you want it to try and count the hit
 
 .. note:: Unlike the JavaScript implementation (above), this View will do all the HitCount processing *before* the content is delivered to the user; if you have a large dataset of Hits or exclusions, this could slow down page load times.  It will also be triggered by web crawlers and other bots that may not have otherwise executed the JavaScript.
@@ -171,7 +171,12 @@ If you would like to add a reverse lookup in your own model to its related ``Hit
 
     # here is an example model with a GenericRelation
     class MyModel(models.Model, HitCountMixin):
-        pass
+
+      # adding a generic relationship makes sorting by Hits possible:
+      # MyModel.objects.order_by("hit_count_generic__hits")
+      hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
 
     # you would access your hit_count like so:
     my_model = MyModel.objects.get(pk=1)
